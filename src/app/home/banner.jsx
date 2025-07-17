@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import Girl from "../../assets/images/girl.webp"
 import Image from 'next/image';
-// import { Menu, X } from 'lucide-react';
 
 const ChurchEvents = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,7 +39,6 @@ const ChurchEvents = () => {
               EVENTS
             </h1>
             <p className='text-gray-600 font-medium text-xs'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate reprehenderit consequuntur eaque atque sapiente harum pariatur ad quos? Nulla quibusdam soluta ad sint deleniti quo accusantium, facilis sunt voluptatem tempora?</p>
-          
           </div>
         </div>
       </main>

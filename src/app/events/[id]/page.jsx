@@ -16,47 +16,12 @@ export default function EventDetailsPage() {
 
     console.log("id", id);
     const [eventData, setEventData] = useState({});
-    const [registerEvent, setRegisterEvent] = useState(false);
     const [registerEventLoader, setRegisterEventLoader] = useState(false);
 
-    // const handleRegisterEvent = async () => {
-    //     setRegisterEventLoader(true);
-
-    //     setTimeout(() => {
-    //         setRegisterEvent(prev => !prev);
-    //         setRegisterEventLoader(false);
-    //         toast.success("Event registered successfully");
-
-    //         // Reduce availableSeat
-    //         const updatedEvent = {
-    //             ...eventData,
-    //             availableSeat: eventData.availableSeat - 1,
-    //         };
-
-    //         const myEvents = JSON.parse(getLocalStorage("myEvents")) || [];
-    //         const existingIndex = myEvents.findIndex(
-    //             (event) => event.id === eventData.id
-    //         );
-
-    //         if (existingIndex) {
-    //             const existingEvent = myEvents[existingIndex];
-    //             existingEvent.bookedCount += 1;
-    //             existingEvent.availableSeat = eventData.availableSeat;
-    //             myEvents[existingIndex] = existingEvent;
-    //         } else {
-    //             eventData.bookedCount = 1;
-    //             myEvents.push(eventData);
-    //         }
-    //         setEventData(updatedEvent);
-    //         setLocalStorage("myEvents", JSON.stringify(myEvents));
-    //         setLocalStorage("selectedEvent", JSON.stringify(updatedEvent));
-    //     }, 3000);
-    // };
     const handleRegisterEvent = async () => {
         setRegisterEventLoader(true);
 
         setTimeout(() => {
-            setRegisterEvent(prev => !prev);
             setRegisterEventLoader(false);
             toast.success("Event registered successfully");
 
@@ -67,6 +32,7 @@ export default function EventDetailsPage() {
             };
 
             const myEvents = JSON.parse(getLocalStorage("myEvents")) || [];
+            const UpdateLocalStorage = JSON.parse(getLocalStorage("eventData")) || [];
             const existingIndex = myEvents.findIndex(
                 (event) => event.id === eventData.id
             );
@@ -81,10 +47,18 @@ export default function EventDetailsPage() {
                 eventData.availableSeat = updatedEvent.availableSeat;
                 myEvents.push(eventData);
             }
+            // localstorage which is listing
+            const updateIndex = UpdateLocalStorage.findIndex(
+                (event) => event.id === eventData.id
+            );
+            if (updateIndex !== -1) {
+                UpdateLocalStorage[updateIndex] = updatedEvent;
+            }
 
             setEventData(updatedEvent);
             setLocalStorage("myEvents", JSON.stringify(myEvents));
             setLocalStorage("selectedEvent", JSON.stringify(updatedEvent));
+            setLocalStorage("eventData", JSON.stringify(UpdateLocalStorage));
         }, 3000);
     };
 

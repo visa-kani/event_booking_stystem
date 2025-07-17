@@ -1,10 +1,17 @@
+'use client'
 import Image from 'next/image';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import LatestEventCard from '@/components/event-card/event-card';
 import Link from 'next/link';
-import { eventData } from '@/constants';
+import { getLocalStorage } from '@/utils/common';
 
 export default function ProductOffers() {
+  const [eventData, setEventData] = useState([]);
+
+  useEffect(() => {
+    const data = JSON.parse(getLocalStorage("eventData"));
+    setEventData(data);
+  }, []);
  
   return (
     <div className="w-full max-w-7xl mx-auto px-4 pt-8">

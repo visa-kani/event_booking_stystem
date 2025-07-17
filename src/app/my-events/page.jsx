@@ -1,15 +1,23 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { getLocalStorage } from "@/utils/common";
+import { getLocalStorage, setLocalStorage } from "@/utils/common";
+import Button from "@/components/button";
 
 export default function Cart() {
   const [eventData, setEventData] = useState([]);
 
-  useEffect(()=>{
-    const data = JSON.parse(getLocalStorage("myEvents"));
+  useEffect(() => {
+    const data = JSON.parse(getLocalStorage("myEvents")) || [];
     setEventData(data);
-  },[])
+  }, []);
+
+  const handleRemoveBooking = (id) => {
+    const updatedEvents = eventData.filter((item) => item.id !== id);
+
+    setEventData(updatedEvents);
+    setLocalStorage("myEvents", JSON.stringify(updatedEvents));
+  };
 
   return (
     <div className="p-6 w-[90%] m-auto">
@@ -19,7 +27,10 @@ export default function Cart() {
       ) : (
         <div className="space-y-4">
           {eventData.map((item) => (
-            <div key={item.id} className="flex justify-between items-center border-2 border-gray-200  p-4 rounded-lg">
+            <div
+              key={item.id}
+              className="flex justify-between items-center border-2 border-gray-200 p-4 rounded-lg"
+            >
               <div className="flex justify-baseline items-center">
                 <div>
                   <Image
@@ -31,9 +42,19 @@ export default function Cart() {
                   />
                 </div>
                 <div>
-                  <p className="font-medium w-[300px] clamp-2">{item.title}</p>
-                  <p className="text-sm text-gray-500">Booked count: {item.bookedCount}</p>
+                  <p className="font-medium w-[300px] clamp-2">
+                    {item.title}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Booked count: {item.bookedCount}
+                  </p>
                 </div>
+              </div>
+              <div>
+                <Button
+                  onClick={() => handleRemoveBooking(item.id)}
+                  buttonText="Remove Booking"
+                />
               </div>
             </div>
           ))}

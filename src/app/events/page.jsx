@@ -1,53 +1,31 @@
-// 'use client';
-
-// import Image from 'next/image';
-// import React, {useState} from 'react';
-// import LatestEventCard from '@/components/event-card/event-card';
-// import { eventData } from '@/constants';
-// import Search from '@/components/search';
-
-// export default function ProductOffers() {
-//     const [search, setSearch] = useState('');
-//     return (
-//         <div className="w-full max-w-7xl mx-auto px-4 pt-8">
-//             <div className='flex justify-between items-center'>
-//                 <div className='text-4xl font-semibold mb-4 text-center pb-4 text-[#0e91ab]'>Events</div>
-//                 <Search setSearch={setSearch} search={search} placeholder="Search by title" />
-//             </div>
-//             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//                 {eventData.map((item, index) => (
-//                     <LatestEventCard
-//                         eventData={item}
-//                         eventLink={`/events/${item.id}`}
-//                     />
-//                 ))
-//                 }
-//             </div>
-//         </div>
-//     );
-// }
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import LatestEventCard from '@/components/event-card/event-card';
-import { eventData } from '@/constants';
+// import { eventData } from '@/constants';
 import Search from '@/components/search';
+import { getLocalStorage } from '@/utils/common';
 
 export default function ProductOffers() {
     const [search, setSearch] = useState('');
-    const [filteredEvents, setFilteredEvents] = useState(eventData);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 6; // set as needed
+    const [eventData, setEventData] = useState([]);
 
-    // Filter events when search changes
     useEffect(() => {
-        const filtered = eventData.filter(event =>
+        const data = JSON.parse(getLocalStorage("eventData"));
+        setEventData(data);
+        const filtered = data.filter(event =>
             event.title.toLowerCase().includes(search.toLowerCase())
         );
         setFilteredEvents(filtered);
         setCurrentPage(1); // reset to first page on new search
     }, [search]);
+
+    console.log("eventData", eventData);
+
+    const [filteredEvents, setFilteredEvents] = useState(eventData);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6; // set as needed
 
     // Pagination logic
     const indexOfLastItem = currentPage * itemsPerPage;
